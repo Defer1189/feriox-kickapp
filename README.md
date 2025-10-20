@@ -29,4 +29,4 @@ npm run dev:frontend
 
 ## Licencia
 
-MIT License - Ver archivo [LICENSE](https://github.com/Defer1189/feriox-kickapp?tab=MIT-1-ov-file) para más detalles.
+MIT License - Ver archivo [LICENSE](https://github.com/Defer1189/feriox-kickapp/tree/main?tab=MIT-1-ov-file) para más detalles.
