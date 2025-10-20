@@ -1,4 +1,4 @@
-﻿# FerIOX Kick App 🚀
+# FerIOX Kick App 🚀
 
 Aplicación Full-Stack para integración con KICK API desarrollada por FerIOX.
 
