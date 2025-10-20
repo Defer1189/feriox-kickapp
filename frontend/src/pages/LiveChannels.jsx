@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { kickApi } from '../services/api';
 import './LiveChannels.css';
 
@@ -8,12 +8,7 @@ function LiveChannels() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
-  useEffect(() => {
-    loadChannels();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  const loadChannels = async () => {
+  const loadChannels = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -25,7 +20,11 @@ function LiveChannels() {
       setLoading(false);
       console.error(err);
     }
-  };
+  }, [page]);
+
+  useEffect(() => {
+    loadChannels();
+  }, [loadChannels]);
 
   return (
     <div className="live-channels">
