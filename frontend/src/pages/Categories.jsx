@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { kickApi } from '../services/api';
 import './Categories.css';
 
@@ -7,7 +7,25 @@ function Categories() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const loadCategories = useCallback(async () => {
+  useEffect(() => {
+    const loadCategories = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await kickApi.getCategories();
+        setCategories(data);
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar las categorías');
+        setLoading(false);
+        console.error(err);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -19,11 +37,7 @@ function Categories() {
       setLoading(false);
       console.error(err);
     }
-  }, []);
-
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
+  };
 
   return (
     <div className="categories-page">

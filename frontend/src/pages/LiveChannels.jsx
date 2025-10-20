@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { kickApi } from '../services/api';
 import './LiveChannels.css';
 
@@ -8,7 +8,25 @@ function LiveChannels() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
 
-  const loadChannels = useCallback(async () => {
+  useEffect(() => {
+    const loadChannels = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await kickApi.getLiveChannels(page, 25);
+        setChannels(data);
+        setLoading(false);
+      } catch (err) {
+        setError('Error al cargar los canales en vivo');
+        setLoading(false);
+        console.error(err);
+      }
+    };
+
+    loadChannels();
+  }, [page]);
+
+  const loadChannels = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -20,11 +38,7 @@ function LiveChannels() {
       setLoading(false);
       console.error(err);
     }
-  }, [page]);
-
-  useEffect(() => {
-    loadChannels();
-  }, [loadChannels]);
+  };
 
   return (
     <div className="live-channels">

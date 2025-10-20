@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { kickApi } from '../services/api';
 import './Home.css';
 
@@ -7,20 +7,20 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const checkHealth = useCallback(async () => {
-    try {
-      const data = await kickApi.healthCheck();
-      setHealth(data);
-      setLoading(false);
-    } catch {
-      setError('Error al conectar con el servidor');
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const data = await kickApi.healthCheck();
+        setHealth(data);
+        setLoading(false);
+      } catch {
+        setError('Error al conectar con el servidor');
+        setLoading(false);
+      }
+    };
+
     checkHealth();
-  }, [checkHealth]);
+  }, []);
 
   return (
     <div className="home">
