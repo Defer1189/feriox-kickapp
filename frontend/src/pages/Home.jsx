@@ -13,7 +13,7 @@ function Home() {
         const data = await kickApi.healthCheck();
         setHealth(data);
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError('Error al conectar con el servidor');
         setLoading(false);
       }

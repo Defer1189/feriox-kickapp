@@ -10,6 +10,7 @@ function LiveChannels() {
 
   useEffect(() => {
     loadChannels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const loadChannels = async () => {
