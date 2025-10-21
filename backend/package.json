@@ -1,0 +1,27 @@
+{
+  "name": "feriox-kickapp-backend",
+  "version": "1.0.0",
+  "description": "Backend server for KICK API integration",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "kick",
+    "api",
+    "express",
+    "oauth2"
+  ],
+  "author": "FerIOX",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "cookie-parser": "^1.4.6",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1"
+  }
+}

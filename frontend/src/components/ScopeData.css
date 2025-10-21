@@ -1,0 +1,112 @@
+.scope-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.scope-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.scope-header {
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  user-select: none;
+}
+
+.scope-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.scope-icon {
+  font-size: 1.5rem;
+}
+
+.scope-title h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.scope-badge {
+  background: #667eea;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #667eea;
+  padding: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.scope-content {
+  padding: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.error {
+  background: #fee;
+  border: 1px solid #fcc;
+  padding: 1rem;
+  border-radius: 6px;
+  color: #c33;
+}
+
+.data-display {
+  position: relative;
+}
+
+.refresh-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.refresh-btn:hover {
+  background: #5568d3;
+}
+
+.data-display pre {
+  background: #f5f5f5;
+  padding: 1.5rem;
+  padding-top: 3rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
