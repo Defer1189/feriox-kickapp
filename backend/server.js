@@ -15,11 +15,27 @@ const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // --- Middlewares ---
-// Middleware de seguridad
+/**
+ * Helmet Security Middleware
+ * Configures security-related HTTP headers
+ * Note: CSP is configured to allow Swagger UI in development
+ * In production, consider enabling stricter CSP
+ */
 app.use(
     helmet({
         crossOriginResourcePolicy: { policy: 'cross-origin' },
-        contentSecurityPolicy: false,
+        // CSP configured for Swagger UI compatibility
+        contentSecurityPolicy:
+            process.env.NODE_ENV === 'production'
+                ? {
+                      directives: {
+                          defaultSrc: ["'self'"],
+                          styleSrc: ["'self'", "'unsafe-inline'"],
+                          scriptSrc: ["'self'"],
+                          imgSrc: ["'self'", 'data:', 'https:'],
+                      },
+                  }
+                : false, // Disabled in development for easier debugging
     })
 );
 
