@@ -1,6 +1,7 @@
 # Guía de Desarrollo - FerIOX Kick App
 
 ## Índice
+
 1. [Entorno de Desarrollo](#entorno-de-desarrollo)
 2. [Estructura del Proyecto](#estructura-del-proyecto)
 3. [Flujo de Trabajo Git](#flujo-de-trabajo-git)
@@ -21,14 +22,14 @@
 
 ```json
 {
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
-    "dsznajder.es7-react-js-snippets",
-    "christian-kohler.path-intellisense",
-    "eamodio.gitlens"
-  ]
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "dsznajder.es7-react-js-snippets",
+        "christian-kohler.path-intellisense",
+        "eamodio.gitlens"
+    ]
 }
 ```
 
@@ -36,18 +37,15 @@
 
 ```json
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact"
-  ],
-  "files.eol": "\n",
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["javascript", "javascriptreact"],
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true
 }
 ```
 
@@ -197,7 +195,7 @@ const handleClick = () => {
 };
 
 // ❌ Incorrecto
-var handleClick = function() {
+var handleClick = function () {
     console.log('Click');
 };
 ```
@@ -224,7 +222,7 @@ const getUser = async () => {
 
 // ❌ Incorrecto
 function getUser() {
-    return fetch('/api/auth/user').then(response => response.json());
+    return fetch('/api/auth/user').then((response) => response.json());
 }
 ```
 
@@ -269,14 +267,18 @@ export const useAuth = () => {
 
 ```css
 /* Block */
-.dashboard-container { }
+.dashboard-container {
+}
 
 /* Element */
-.dashboard-container__header { }
-.dashboard-container__content { }
+.dashboard-container__header {
+}
+.dashboard-container__content {
+}
 
 /* Modifier */
-.dashboard-container--loading { }
+.dashboard-container--loading {
+}
 ```
 
 #### 2. Variables CSS
@@ -374,12 +376,12 @@ Instala la extensión React DevTools para Chrome o Firefox.
 ```javascript
 const AuthProvider = ({ children }) => {
     console.log('AuthProvider rendering');
-    
+
     const checkAuth = async () => {
         console.log('Checking authentication...');
         // ...
     };
-    
+
     // ...
 };
 ```
@@ -462,11 +464,11 @@ const PORT = 3000;
 // ✅ Correcto - Custom Hook
 const useUserData = () => {
     const [user, setUser] = useState(null);
-    
+
     useEffect(() => {
         fetchUser();
     }, []);
-    
+
     return { user };
 };
 
@@ -479,13 +481,13 @@ const Dashboard = () => {
 // ❌ Incorrecto - Todo en el componente
 const Dashboard = () => {
     const [user, setUser] = useState(null);
-    
+
     useEffect(() => {
         fetch('/api/auth/user')
-            .then(res => res.json())
-            .then(data => setUser(data));
+            .then((res) => res.json())
+            .then((data) => setUser(data));
     }, []);
-    
+
     return <div>{user?.name}</div>;
 };
 ```
@@ -503,9 +505,7 @@ const Dashboard = () => {
  * // challenge = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
  */
 function generateCodeChallenge(verifier) {
-    return crypto.createHash('sha256')
-        .update(verifier)
-        .digest('base64url');
+    return crypto.createHash('sha256').update(verifier).digest('base64url');
 }
 ```
 
@@ -607,24 +607,24 @@ git reset --soft HEAD~1
 ## Próximos Pasos
 
 1. **Agregar Tests:**
-   - Tests unitarios para funciones helper
-   - Tests de integración para endpoints
-   - Tests de componentes React
+    - Tests unitarios para funciones helper
+    - Tests de integración para endpoints
+    - Tests de componentes React
 
 2. **Mejorar Seguridad:**
-   - Rate limiting
-   - Input sanitization
-   - CSRF tokens adicionales
+    - Rate limiting
+    - Input sanitization
+    - CSRF tokens adicionales
 
 3. **Performance:**
-   - Caching con Redis
-   - Code splitting en frontend
-   - Lazy loading de componentes
+    - Caching con Redis
+    - Code splitting en frontend
+    - Lazy loading de componentes
 
 4. **Features Adicionales:**
-   - Refresh token rotation
-   - Webhooks de KICK
-   - Dashboard con estadísticas en tiempo real
+    - Refresh token rotation
+    - Webhooks de KICK
+    - Dashboard con estadísticas en tiempo real
 
 ---
 

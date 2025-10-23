@@ -16,18 +16,22 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // --- Middlewares ---
 // Middleware de seguridad
-app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-    contentSecurityPolicy: false,
-}));
+app.use(
+    helmet({
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+        contentSecurityPolicy: false,
+    })
+);
 
 // Middleware de CORS
-app.use(cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-}));
+app.use(
+    cors({
+        origin: FRONTEND_URL,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    })
+);
 
 // Middleware para parsear JSON
 app.use(express.json({ limit: '10mb' }));
@@ -58,9 +62,7 @@ function generateCodeVerifier() {
  * @returns {string} Code challenge en formato base64url
  */
 function generateCodeChallenge(verifier) {
-    return crypto.createHash('sha256')
-        .update(verifier)
-        .digest('base64url');
+    return crypto.createHash('sha256').update(verifier).digest('base64url');
 }
 
 /**
@@ -74,10 +76,14 @@ function generateState() {
 // --- Rutas ---
 
 // Swagger UI Documentation
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'FerIOX Kick App API Docs',
-}));
+app.use(
+    '/api/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        customCss: '.swagger-ui .topbar { display: none }',
+        customSiteTitle: 'FerIOX Kick App API Docs',
+    })
+);
 
 /**
  * @swagger
@@ -202,7 +208,6 @@ app.get('/api/auth/login', (req, res) => {
         console.log('🔐 URL de autorización generada:', authUrl);
 
         res.redirect(authUrl);
-
     } catch (error) {
         console.error('❌ Error en /api/auth/login:', error);
         res.status(500).json({
@@ -244,7 +249,12 @@ app.get('/api/auth/callback', async (req, res) => {
     const { code, state, error: authError, error_description } = req.query;
     const { kick_code_verifier: codeVerifier, kick_oauth_state: originalState } = req.signedCookies;
 
-    console.log('🔄 Callback recibido:', { code: !!code, state, hasCodeVerifier: !!codeVerifier, hasOriginalState: !!originalState });
+    console.log('🔄 Callback recibido:', {
+        code: !!code,
+        state,
+        hasCodeVerifier: !!codeVerifier,
+        hasOriginalState: !!originalState,
+    });
 
     if (authError) {
         console.error('❌ Error de OAuth:', authError, error_description);
@@ -254,7 +264,9 @@ app.get('/api/auth/callback', async (req, res) => {
         return res.status(400).send('Error: No se recibió código de autorización.');
     }
     if (!codeVerifier) {
-        return res.status(400).send('Error: No se encontró el verificador PKCE. La sesión puede haber expirado.');
+        return res
+            .status(400)
+            .send('Error: No se encontró el verificador PKCE. La sesión puede haber expirado.');
     }
     if (!state || !originalState || state !== originalState) {
         return res.status(400).send('Error: State no válido. Posible ataque CSRF.');
@@ -277,12 +289,12 @@ app.get('/api/auth/callback', async (req, res) => {
         const response = await axios.post(KICK_TOKEN_URL, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Accept': 'application/json',
+                Accept: 'application/json',
             },
             timeout: 15000,
         });
 
-        const { access_token, refresh_token, expires_in, token_type, scope } = response.data;
+        const { access_token, refresh_token, expires_in } = response.data;
         console.log('✅ Token obtenido exitosamente');
 
         res.cookie('kick_access_token', access_token, {
@@ -304,8 +316,7 @@ app.get('/api/auth/callback', async (req, res) => {
         res.clearCookie('kick_code_verifier');
         res.clearCookie('kick_oauth_state');
 
-        res.redirect(`/dashboard?auth=success`);
-
+        res.redirect('/dashboard?auth=success');
     } catch (error) {
         console.error('❌ Error en callback OAuth:');
         console.error('Status:', error.response?.status);
@@ -362,8 +373,8 @@ app.get('/api/auth/user', async (req, res) => {
     try {
         const userResponse = await axios.get('https://api.kick.com/public/v1/users', {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Accept': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+                Accept: 'application/json',
                 'User-Agent': 'FerIOX-KickApp/1.0.0',
             },
             timeout: 10000,
@@ -376,7 +387,6 @@ app.get('/api/auth/user', async (req, res) => {
             data: userResponse.data,
             timestamp: new Date().toISOString(),
         });
-
     } catch (error) {
         console.error('❌ Error al obtener datos del usuario:');
         console.error('Status:', error.response?.status);
@@ -483,12 +493,12 @@ app.get('/api/auth/debug', (req, res) => {
                 code_verifier: !!codeVerifier,
                 oauth_state: !!oauthState,
             },
-            access_token_preview: accessToken ? 
-                `${accessToken.substring(0, 20)}...${accessToken.substring(accessToken.length - 20)}` : 
-                'No disponible',
-            refresh_token_preview: refreshToken ? 
-                `${refreshToken.substring(0, 20)}...${refreshToken.substring(refreshToken.length - 20)}` : 
-                'No disponible'
+            access_token_preview: accessToken
+                ? `${accessToken.substring(0, 20)}...${accessToken.substring(accessToken.length - 20)}`
+                : 'No disponible',
+            refresh_token_preview: refreshToken
+                ? `${refreshToken.substring(0, 20)}...${refreshToken.substring(refreshToken.length - 20)}`
+                : 'No disponible',
         },
         environment: process.env.NODE_ENV,
         server_time: new Date().toISOString(),
@@ -502,9 +512,13 @@ app.get('/api/auth/debug', (req, res) => {
                 const payload = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString());
                 debugInfo.token_decoded = {
                     payload: payload,
-                    issued_at: payload.iat ? new Date(payload.iat * 1000).toISOString() : 'No disponible',
-                    expires_at: payload.exp ? new Date(payload.exp * 1000).toISOString() : 'No disponible',
-                    scopes: payload.scope || 'No especificado'
+                    issued_at: payload.iat
+                        ? new Date(payload.iat * 1000).toISOString()
+                        : 'No disponible',
+                    expires_at: payload.exp
+                        ? new Date(payload.exp * 1000).toISOString()
+                        : 'No disponible',
+                    scopes: payload.scope || 'No especificado',
                 };
             }
         } catch (error) {
@@ -547,21 +561,27 @@ app.get('/dashboard', (req, res) => {
                 
                 <div class="status ${isAuthenticated ? 'status-authenticated' : 'status-not-authenticated'}">
                     <h3>Estado de Autenticación:</h3>
-                    <p>${isAuthenticated ? 
-                        '✅ <strong>Autenticado</strong> - Tienes una sesión activa' : 
-                        '❌ <strong>No autenticado</strong> - Inicia sesión para continuar'}</p>
+                    <p>${
+    isAuthenticated
+        ? '✅ <strong>Autenticado</strong> - Tienes una sesión activa'
+        : '❌ <strong>No autenticado</strong> - Inicia sesión para continuar'
+}</p>
                 </div>
                 
                 <div class="debug">
                     <h3>🔧 Panel de Control</h3>
-                    ${isAuthenticated ? `
+                    ${
+    isAuthenticated
+        ? `
                         <button class="btn-success" onclick="testEndpoint('/api/auth/user')">👤 Ver mis datos</button>
                         <button class="btn-info" onclick="testEndpoint('/api/auth/debug')">🐛 Debug del Token</button>
                         <button class="btn-info" onclick="testEndpoint('/api/auth/config')">⚙️ Ver Configuración</button>
                         <button class="btn-danger" onclick="logout()">🚪 Cerrar Sesión</button>
-                    ` : `
+                    `
+        : `
                         <a href="/api/auth/login"><button class="btn-primary">🔐 Iniciar Sesión con KICK</button></a>
-                    `}
+                    `
+}
                 </div>
 
                 <div id="result" class="debug"></div>
@@ -633,17 +653,25 @@ app.use('*', (req, res) => {
     res.status(404).json({
         error: 'Ruta no encontrada',
         path: req.originalUrl,
-        availableEndpoints: ['/api/health', '/api/auth/login', '/api/auth/user', '/api/auth/logout', '/api/auth/config', '/api/auth/debug', '/dashboard'],
+        availableEndpoints: [
+            '/api/health',
+            '/api/auth/login',
+            '/api/auth/user',
+            '/api/auth/logout',
+            '/api/auth/config',
+            '/api/auth/debug',
+            '/dashboard',
+        ],
     });
 });
 
 // Manejo global de errores
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
     console.error('❌ Error del servidor:', err);
     res.status(500).json({
         status: 'error',
         message: 'Error interno del servidor',
-        error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+        error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong',
     });
 });
 

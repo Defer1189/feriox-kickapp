@@ -5,9 +5,11 @@ Esta carpeta contiene toda la documentación técnica del proyecto.
 ## 📚 Documentos Disponibles
 
 ### [Guía de Instalación](./INSTALLATION.md)
+
 Instrucciones paso a paso para instalar y configurar el proyecto localmente.
 
 **Contenido:**
+
 - Requisitos previos
 - Instalación de dependencias
 - Configuración de variables de entorno
@@ -20,9 +22,11 @@ Instrucciones paso a paso para instalar y configurar el proyecto localmente.
 ---
 
 ### [Documentación Técnica](./TECHNICAL_DOCUMENTATION.md)
+
 Documentación completa de la arquitectura, componentes y funcionamiento del sistema.
 
 **Contenido:**
+
 - Descripción general del proyecto
 - Arquitectura del sistema
 - Configuración del entorno
@@ -39,9 +43,11 @@ Documentación completa de la arquitectura, componentes y funcionamiento del sis
 ---
 
 ### [Guía de Desarrollo](./DEVELOPMENT.md)
+
 Best practices, estándares de código y flujo de trabajo para desarrolladores.
 
 **Contenido:**
+
 - Configuración del entorno de desarrollo
 - Estructura del proyecto
 - Flujo de trabajo Git
@@ -67,6 +73,7 @@ Si es tu primera vez con este proyecto:
 ## 🔗 Enlaces Útiles
 
 ### Documentación Externa
+
 - [KICK Dev Documentation](https://dev.kick.com)
 - [OAuth 2.1 Specification](https://oauth.net/2.1/)
 - [PKCE RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
@@ -75,6 +82,7 @@ Si es tu primera vez con este proyecto:
 - [Vite Documentation](https://vitejs.dev/)
 
 ### API Documentation
+
 - **Swagger UI:** http://localhost:3000/api/docs (cuando el servidor esté corriendo)
 
 ---
@@ -82,10 +90,13 @@ Si es tu primera vez con este proyecto:
 ## 📝 Convenciones de Documentación
 
 ### Formato Markdown
+
 Toda la documentación está escrita en Markdown para fácil lectura y versionado.
 
 ### Emojis
+
 Usamos emojis para facilitar la navegación visual:
+
 - 📚 Documentación
 - 🚀 Inicio rápido / Despliegue
 - ⚙️ Configuración
@@ -96,6 +107,7 @@ Usamos emojis para facilitar la navegación visual:
 - 💡 Tips
 
 ### Bloques de Código
+
 ```bash
 # Los comandos de terminal están en bloques bash
 npm install
@@ -107,7 +119,9 @@ const example = 'código de ejemplo';
 ```
 
 ### Enlaces Internos
+
 Los enlaces entre documentos usan rutas relativas:
+
 ```markdown
 [Guía de Instalación](./INSTALLATION.md)
 ```
@@ -137,10 +151,12 @@ Si encuentras errores o quieres mejorar la documentación:
 ## 📊 Diagramas
 
 Para diagramas complejos, usamos:
+
 - **Texto ASCII** para diagramas simples
 - **Mermaid** para diagramas de flujo (GitHub lo renderiza automáticamente)
 
 Ejemplo de diagrama Mermaid:
+
 ```mermaid
 graph TD
     A[Usuario] -->|Click Login| B[Frontend]
@@ -156,10 +172,11 @@ graph TD
 ## 📞 Contacto
 
 Si tienes preguntas sobre la documentación:
+
 - Crea un issue en GitHub
 - Contacta al equipo de desarrollo
 
 ---
 
 **Desarrollado por FerIOX**  
-*Escalado Horizontal, Ambición Vertical*
+_Escalado Horizontal, Ambición Vertical_

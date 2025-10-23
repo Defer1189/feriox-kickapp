@@ -21,13 +21,13 @@ function App() {
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route 
-                        path="/dashboard" 
+                    <Route
+                        path="/dashboard"
                         element={
                             <ProtectedRoute>
                                 <Dashboard />
                             </ProtectedRoute>
-                        } 
+                        }
                     />
                 </Routes>
             </AuthProvider>
@@ -36,4 +36,3 @@ function App() {
 }
 
 export default App;
-

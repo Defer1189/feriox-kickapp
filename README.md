@@ -26,6 +26,7 @@ FerIOX Kick App es una aplicación completa que permite la integración segura c
 ## 🛠️ Tecnologías
 
 ### Backend
+
 - **Node.js** (>= 18.0.0)
 - **Express.js** 4.21.2
 - **Axios** 1.12.2
@@ -35,12 +36,14 @@ FerIOX Kick App es una aplicación completa que permite la integración segura c
 - **Swagger** (JSDoc + UI Express)
 
 ### Frontend
+
 - **React** 19.1.1
 - **Vite** (rolldown-vite)
 - **React Router DOM** 7.9.4
 - **Axios** 1.12.2
 
 ### Herramientas de Desarrollo
+
 - **ESLint** 8.57.0
 - **Prettier** 3.2.5
 - **Nodemon** 3.1.10
@@ -86,38 +89,43 @@ feriox-kickapp/
 ### Instalación
 
 1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/Defer1189/feriox-kickapp.git
-   cd feriox-kickapp
-   ```
+
+    ```bash
+    git clone https://github.com/Defer1189/feriox-kickapp.git
+    cd feriox-kickapp
+    ```
 
 2. **Instalar todas las dependencias**
-   ```bash
-   npm run install:all
-   ```
+
+    ```bash
+    npm run install:all
+    ```
 
 3. **Configurar variables de entorno**
-   ```bash
-   cp backend/.env.example backend/.env
-   # Editar backend/.env con tus credenciales de KICK
-   ```
+
+    ```bash
+    cp backend/.env.example backend/.env
+    # Editar backend/.env con tus credenciales de KICK
+    ```
 
 4. **Iniciar la aplicación**
 
-   **Terminal 1 - Backend:**
-   ```bash
-   npm run dev:backend
-   ```
+    **Terminal 1 - Backend:**
 
-   **Terminal 2 - Frontend:**
-   ```bash
-   npm run dev:frontend
-   ```
+    ```bash
+    npm run dev:backend
+    ```
+
+    **Terminal 2 - Frontend:**
+
+    ```bash
+    npm run dev:frontend
+    ```
 
 5. **Abrir en el navegador**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:3000
-   - Swagger Docs: http://localhost:3000/api/docs
+    - Frontend: http://localhost:5173
+    - Backend API: http://localhost:3000
+    - Swagger Docs: http://localhost:3000/api/docs
 
 ---
 
@@ -132,6 +140,7 @@ feriox-kickapp/
 ### API Documentation
 
 Una vez que el servidor esté corriendo, accede a la documentación Swagger en:
+
 ```
 http://localhost:3000/api/docs
 ```
@@ -145,8 +154,8 @@ http://localhost:3000/api/docs
 3. Ve a **Settings** → **Developer**
 4. Crea una nueva aplicación
 5. Configura:
-   - **Name**: FerIOX Kick App
-   - **Redirect URI**: `http://localhost:3000/api/auth/callback`
+    - **Name**: FerIOX Kick App
+    - **Redirect URI**: `http://localhost:3000/api/auth/callback`
 6. Guarda tu `client_id` y `client_secret`
 7. Actualiza el archivo `backend/.env` con estas credenciales
 
@@ -199,15 +208,15 @@ sequenceDiagram
 
 ### Scopes Solicitados
 
-| Scope | Descripción | Uso |
-|-------|-------------|-----|
-| `user:read` | Leer información del usuario | Datos básicos del perfil |
-| `channel:read` | Leer información del canal | Datos del canal |
-| `channel:write` | Modificar metadata del canal | Actualizar stream |
-| `chat:write` | Enviar mensajes en chat | Bots de chat |
-| `streamkey:read` | Leer stream key (sensible) | Configuración de stream |
-| `events:subscribe` | Suscribirse a webhooks | Notificaciones en tiempo real |
-| `moderation:ban` | Acciones de moderación | Herramientas de moderación |
+| Scope              | Descripción                  | Uso                           |
+| ------------------ | ---------------------------- | ----------------------------- |
+| `user:read`        | Leer información del usuario | Datos básicos del perfil      |
+| `channel:read`     | Leer información del canal   | Datos del canal               |
+| `channel:write`    | Modificar metadata del canal | Actualizar stream             |
+| `chat:write`       | Enviar mensajes en chat      | Bots de chat                  |
+| `streamkey:read`   | Leer stream key (sensible)   | Configuración de stream       |
+| `events:subscribe` | Suscribirse a webhooks       | Notificaciones en tiempo real |
+| `moderation:ban`   | Acciones de moderación       | Herramientas de moderación    |
 
 ---
 
@@ -215,20 +224,20 @@ sequenceDiagram
 
 ### Endpoints Públicos
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/health` | Health check del servidor |
-| GET | `/api` | Información del servicio |
-| GET | `/api/auth/login` | Inicia flujo OAuth |
-| GET | `/api/auth/callback` | Callback OAuth |
-| GET | `/api/docs` | Documentación Swagger |
+| Método | Endpoint             | Descripción               |
+| ------ | -------------------- | ------------------------- |
+| GET    | `/api/health`        | Health check del servidor |
+| GET    | `/api`               | Información del servicio  |
+| GET    | `/api/auth/login`    | Inicia flujo OAuth        |
+| GET    | `/api/auth/callback` | Callback OAuth            |
+| GET    | `/api/docs`          | Documentación Swagger     |
 
 ### Endpoints Protegidos
 
-| Método | Endpoint | Descripción |
-|--------|----------|-------------|
-| GET | `/api/auth/user` | Datos del usuario autenticado |
-| POST | `/api/auth/logout` | Cerrar sesión |
+| Método | Endpoint           | Descripción                   |
+| ------ | ------------------ | ----------------------------- |
+| GET    | `/api/auth/user`   | Datos del usuario autenticado |
+| POST   | `/api/auth/logout` | Cerrar sesión                 |
 
 ---
 
@@ -318,6 +327,6 @@ Si encuentras algún problema o tienes preguntas:
 
 **Desarrollado con ❤️ por FerIOX**
 
-*Escalado Horizontal, Ambición Vertical*
+_Escalado Horizontal, Ambición Vertical_
 
 </div>

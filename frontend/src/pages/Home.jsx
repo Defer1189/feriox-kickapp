@@ -75,9 +75,7 @@ const Home = () => {
                         <span className="button-icon">🎮</span>
                         Iniciar Sesión con KICK
                     </button>
-                    <p className="login-info">
-                        Necesitas una cuenta de KICK con 2FA habilitado
-                    </p>
+                    <p className="login-info">Necesitas una cuenta de KICK con 2FA habilitado</p>
                 </div>
 
                 <div className="footer">

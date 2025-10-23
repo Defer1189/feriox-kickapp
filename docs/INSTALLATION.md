@@ -5,19 +5,19 @@
 Antes de comenzar, asegúrate de tener instalado:
 
 1. **Node.js** (versión 18.0.0 o superior)
-   - Verifica la versión: `node --version`
-   - Descarga desde: https://nodejs.org/
+    - Verifica la versión: `node --version`
+    - Descarga desde: https://nodejs.org/
 
 2. **npm** (viene con Node.js)
-   - Verifica la versión: `npm --version`
+    - Verifica la versión: `npm --version`
 
 3. **Git**
-   - Verifica la versión: `git --version`
-   - Descarga desde: https://git-scm.com/
+    - Verifica la versión: `git --version`
+    - Descarga desde: https://git-scm.com/
 
 4. **Cuenta de KICK** con 2FA habilitado
-   - Regístrate en: https://kick.com
-   - Habilita 2FA en Settings → Security
+    - Regístrate en: https://kick.com
+    - Habilita 2FA en Settings → Security
 
 ## Paso 1: Clonar el Repositorio
 
@@ -37,6 +37,7 @@ npm run install:all
 ```
 
 Este comando ejecutará:
+
 - `npm install` en el directorio raíz (ESLint y Prettier)
 - `npm install` en el directorio `backend/`
 - `npm install` en el directorio `frontend/`
@@ -52,15 +53,16 @@ Este comando ejecutará:
 3. Haz clic en **Create New Application**
 
 4. Completa el formulario:
-   - **Application Name:** FerIOX Kick App (o el nombre que prefieras)
-   - **Redirect URI:** `http://localhost:3000/api/auth/callback`
-   - **Description:** Aplicación full-stack para integración con KICK API
+    - **Application Name:** FerIOX Kick App (o el nombre que prefieras)
+    - **Redirect URI:** `http://localhost:3000/api/auth/callback`
+    - **Description:** Aplicación full-stack para integración con KICK API
 
 5. Una vez creada, guarda:
-   - **Client ID** - Lo necesitarás para el archivo .env
-   - **Client Secret** - Lo necesitarás para el archivo .env (¡mantenlo seguro!)
+    - **Client ID** - Lo necesitarás para el archivo .env
+    - **Client Secret** - Lo necesitarás para el archivo .env (¡mantenlo seguro!)
 
-**⚠️ IMPORTANTE:** 
+**⚠️ IMPORTANTE:**
+
 - El **Client Secret** es confidencial. No lo compartas ni lo subas a repositorios públicos.
 - Asegúrate de que la **Redirect URI** coincida exactamente con la que configurarás en el .env
 
@@ -174,6 +176,7 @@ npx prettier --version
 ### Opción 1: Iniciar Backend y Frontend por Separado
 
 **Terminal 1 - Backend:**
+
 ```bash
 # Desde el directorio raíz
 npm run dev:backend
@@ -184,6 +187,7 @@ npm run dev
 ```
 
 Deberías ver:
+
 ```
 🚀 Servidor FerIOX Backend inicializado correctamente
 📍 Puerto: 3000
@@ -192,6 +196,7 @@ Deberías ver:
 ```
 
 **Terminal 2 - Frontend:**
+
 ```bash
 # Desde el directorio raíz
 npm run dev:frontend
@@ -202,6 +207,7 @@ npm run dev
 ```
 
 Deberías ver:
+
 ```
   VITE v... ready in XXX ms
 
@@ -239,26 +245,27 @@ tmux attach -t feriox
 ## Paso 7: Verificar que Todo Funciona
 
 1. **Verificar el Backend:**
-   - Abre tu navegador en http://localhost:3000/api/health
-   - Deberías ver un JSON con `"status": "success"`
+    - Abre tu navegador en http://localhost:3000/api/health
+    - Deberías ver un JSON con `"status": "success"`
 
 2. **Verificar la Documentación API:**
-   - Abre http://localhost:3000/api/docs
-   - Deberías ver la documentación Swagger
+    - Abre http://localhost:3000/api/docs
+    - Deberías ver la documentación Swagger
 
 3. **Verificar el Frontend:**
-   - Abre http://localhost:5173
-   - Deberías ver la página de inicio de FerIOX Kick App
+    - Abre http://localhost:5173
+    - Deberías ver la página de inicio de FerIOX Kick App
 
 4. **Verificar la Configuración OAuth:**
-   - Abre http://localhost:3000/api/auth/config
-   - Deberías ver que `client_id` está configurado
+    - Abre http://localhost:3000/api/auth/config
+    - Deberías ver que `client_id` está configurado
 
 ## Problemas Comunes
 
 ### Error: "Cannot find module"
 
-**Solución:** 
+**Solución:**
+
 ```bash
 # Reinstalar dependencias
 rm -rf node_modules backend/node_modules frontend/node_modules
@@ -268,6 +275,7 @@ npm run install:all
 ### Error: "Port 3000 already in use"
 
 **Solución:**
+
 ```bash
 # Encontrar el proceso usando el puerto 3000
 lsof -i :3000  # En Linux/Mac
@@ -280,6 +288,7 @@ PORT=3001
 ### Error: "KICK_CLIENT_ID is not defined"
 
 **Solución:**
+
 - Verifica que el archivo `backend/.env` exista
 - Verifica que las variables estén configuradas correctamente
 - Reinicia el servidor backend
@@ -287,6 +296,7 @@ PORT=3001
 ### Error: "CORS policy"
 
 **Solución:**
+
 - Verifica que `FRONTEND_URL` en `backend/.env` sea `http://localhost:5173`
 - Verifica que `CORS_ORIGIN` en `backend/.env` sea `http://localhost:5173`
 - Reinicia el servidor backend
@@ -294,6 +304,7 @@ PORT=3001
 ### Error: Frontend no carga
 
 **Solución:**
+
 ```bash
 # Limpiar caché de Vite
 cd frontend

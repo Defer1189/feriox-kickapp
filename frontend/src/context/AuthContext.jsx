@@ -4,6 +4,8 @@
  * @module AuthContext
  */
 
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -87,9 +89,13 @@ export const AuthProvider = ({ children }) => {
      */
     const logout = async () => {
         try {
-            await axios.post('/api/auth/logout', {}, {
-                withCredentials: true,
-            });
+            await axios.post(
+                '/api/auth/logout',
+                {},
+                {
+                    withCredentials: true,
+                }
+            );
             setUser(null);
             setIsAuthenticated(false);
         } catch (error) {

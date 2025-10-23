@@ -73,9 +73,7 @@ const Dashboard = () => {
                         <div className="info-content">
                             <div className="info-row">
                                 <span className="info-label">Estado:</span>
-                                <span className="status-badge authenticated">
-                                    ✓ Autenticado
-                                </span>
+                                <span className="status-badge authenticated">✓ Autenticado</span>
                             </div>
                             <div className="info-row">
                                 <span className="info-label">Método:</span>
@@ -93,7 +91,7 @@ const Dashboard = () => {
                         <div className="info-content">
                             {user ? (
                                 <>
-                                    <button 
+                                    <button
                                         className="toggle-button"
                                         onClick={() => setShowData(!showData)}
                                     >
