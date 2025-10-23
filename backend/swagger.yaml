@@ -1,0 +1,384 @@
+openapi: 3.0.3
+info:
+  title: FerIOX Kick App API
+  description: |
+    API Backend para la integración con KICK Dev utilizando OAuth 2.1 con PKCE.
+    
+    ## Autenticación
+    
+    La autenticación se maneja mediante cookies httpOnly que contienen los tokens de acceso.
+    
+    ## Flujo OAuth 2.1 con PKCE
+    
+    1. Usuario inicia sesión en `/api/auth/login`
+    2. Backend genera PKCE y redirige a KICK
+    3. Usuario autoriza en KICK
+    4. KICK redirige al callback con código
+    5. Backend intercambia código por tokens
+    6. Tokens se almacenan en cookies httpOnly
+    7. Usuario accede a rutas protegidas
+    
+  version: 1.0.0
+  contact:
+    name: FerIOX
+    url: https://github.com/Defer1189/feriox-kickapp
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor de desarrollo
+  - url: https://api.feriox.com
+    description: Servidor de producción
+
+tags:
+  - name: Sistema
+    description: Endpoints de salud y estado del servidor
+  - name: Autenticación
+    description: Endpoints de autenticación OAuth 2.1
+
+paths:
+  /api/health:
+    get:
+      tags:
+        - Sistema
+      summary: Verificar salud del servidor
+      description: Verifica que el servidor esté funcionando correctamente
+      operationId: getHealth
+      responses:
+        '200':
+          description: Servidor funcionando correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: ✅ Servidor FerIOX Backend funcionando correctamente
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2025-10-23T15:52:23.176Z'
+                  environment:
+                    type: string
+                    example: development
+                  version:
+                    type: string
+                    example: 1.0.0
+
+  /api:
+    get:
+      tags:
+        - Sistema
+      summary: Información del servicio
+      description: Proporciona información básica sobre el servicio y sus endpoints
+      operationId: getServiceInfo
+      responses:
+        '200':
+          description: Información del servicio
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  service:
+                    type: string
+                    example: FerIOX KICK API Integration
+                  developer:
+                    type: string
+                    example: FerIOX
+                  status:
+                    type: string
+                    example: active
+                  version:
+                    type: string
+                    example: 1.0.0
+                  message:
+                    type: string
+                    example: Escalado Horizontal, Ambición Vertical - KICK Dev
+                  endpoints:
+                    type: object
+                    properties:
+                      health:
+                        type: string
+                        example: /api/health
+                      login:
+                        type: string
+                        example: /api/auth/login
+                      user:
+                        type: string
+                        example: /api/auth/user
+                      logout:
+                        type: string
+                        example: /api/auth/logout
+                      config:
+                        type: string
+                        example: /api/auth/config
+                      debug:
+                        type: string
+                        example: /api/auth/debug
+
+  /api/auth/login:
+    get:
+      tags:
+        - Autenticación
+      summary: Iniciar autenticación OAuth
+      description: |
+        Inicia el flujo de autenticación OAuth 2.1 con PKCE.
+        Genera PKCE, guarda en cookies y redirige a KICK.
+      operationId: authLogin
+      responses:
+        '302':
+          description: Redirige a la página de autorización de KICK
+          headers:
+            Location:
+              description: URL de autorización de KICK
+              schema:
+                type: string
+            Set-Cookie:
+              description: Cookies con code_verifier y state
+              schema:
+                type: string
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/callback:
+    get:
+      tags:
+        - Autenticación
+      summary: Callback de OAuth
+      description: |
+        KICK redirige aquí después de la autorización.
+        Intercambia el código por tokens y los guarda en cookies.
+      operationId: authCallback
+      parameters:
+        - name: code
+          in: query
+          required: true
+          description: Código de autorización de KICK
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State token para validación CSRF
+          schema:
+            type: string
+        - name: error
+          in: query
+          required: false
+          description: Error de autorización (si aplica)
+          schema:
+            type: string
+        - name: error_description
+          in: query
+          required: false
+          description: Descripción del error de autorización
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirige al dashboard después de autenticación exitosa
+          headers:
+            Location:
+              description: URL del dashboard
+              schema:
+                type: string
+                example: /dashboard?auth=success
+            Set-Cookie:
+              description: Cookies con access_token y refresh_token
+              schema:
+                type: string
+        '400':
+          description: Error en la validación del callback
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          description: Error al intercambiar código por tokens
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /api/auth/user:
+    get:
+      tags:
+        - Autenticación
+      summary: Obtener datos del usuario
+      description: |
+        Obtiene la información del usuario autenticado desde la API de KICK.
+        Requiere cookie de autenticación.
+      operationId: getUser
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Datos del usuario obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    description: Datos del usuario desde la API de KICK
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2025-10-23T15:52:23.176Z'
+        '401':
+          description: No autorizado - Token faltante o inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error al obtener datos del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/logout:
+    post:
+      tags:
+        - Autenticación
+      summary: Cerrar sesión
+      description: |
+        Cierra la sesión del usuario eliminando las cookies de autenticación.
+      operationId: authLogout
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Sesión cerrada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Sesión cerrada correctamente
+                  redirect:
+                    type: string
+                    example: /dashboard?logout=success
+
+  /api/auth/config:
+    get:
+      tags:
+        - Autenticación
+      summary: Verificar configuración OAuth
+      description: Verifica que las credenciales OAuth estén configuradas correctamente
+      operationId: getAuthConfig
+      responses:
+        '200':
+          description: Configuración de OAuth
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  client_id:
+                    type: string
+                    example: ✅ Configurado
+                  redirect_uri:
+                    type: string
+                    example: http://localhost:3000/api/auth/callback
+                  has_client_secret:
+                    type: boolean
+                    example: true
+                  environment:
+                    type: string
+                    example: development
+
+  /api/auth/debug:
+    get:
+      tags:
+        - Autenticación
+      summary: Información de debug de la sesión
+      description: Proporciona información detallada sobre la sesión actual (útil para debugging)
+      operationId: getAuthDebug
+      responses:
+        '200':
+          description: Información de debug
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session:
+                    type: object
+                    properties:
+                      cookies_present:
+                        type: object
+                        properties:
+                          access_token:
+                            type: boolean
+                          refresh_token:
+                            type: boolean
+                          code_verifier:
+                            type: boolean
+                          oauth_state:
+                            type: boolean
+                      access_token_preview:
+                        type: string
+                      refresh_token_preview:
+                        type: string
+                  token_decoded:
+                    type: object
+                    properties:
+                      payload:
+                        type: object
+                      issued_at:
+                        type: string
+                      expires_at:
+                        type: string
+                      scopes:
+                        type: string
+                  environment:
+                    type: string
+                  server_time:
+                    type: string
+                    format: date-time
+                  server_url:
+                    type: string
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Tipo de error
+        message:
+          type: string
+          description: Mensaje descriptivo del error
+        details:
+          type: string
+          description: Detalles adicionales (solo en development)
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: kick_access_token
+      description: Token de acceso almacenado en cookie httpOnly
