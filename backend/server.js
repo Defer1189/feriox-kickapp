@@ -36,7 +36,14 @@ try {
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
-    contentSecurityPolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
   })
 );
 
@@ -218,18 +225,28 @@ app.get('/api/auth/callback', async (req, res) => {
 
   if (authError) {
     console.error('❌ Error de OAuth:', authError, error_description);
-    return res.status(400).send(`Error de autorización: ${authError} - ${error_description}`);
+    return res.status(400).json({
+      error: 'Error de autorización',
+      message: 'La autorización con KICK falló. Por favor, intenta nuevamente.',
+    });
   }
   if (!code) {
-    return res.status(400).send('Error: No se recibió código de autorización.');
+    return res.status(400).json({
+      error: 'Código faltante',
+      message: 'No se recibió código de autorización.',
+    });
   }
   if (!codeVerifier) {
-    return res
-      .status(400)
-      .send('Error: No se encontró el verificador PKCE. La sesión puede haber expirado.');
+    return res.status(400).json({
+      error: 'Verificador PKCE faltante',
+      message: 'No se encontró el verificador PKCE. La sesión puede haber expirado.',
+    });
   }
   if (!state || !originalState || state !== originalState) {
-    return res.status(400).send('Error: State no válido. Posible ataque CSRF.');
+    return res.status(400).json({
+      error: 'State inválido',
+      message: 'State no válido. Posible ataque CSRF.',
+    });
   }
 
   try {
@@ -283,11 +300,12 @@ app.get('/api/auth/callback', async (req, res) => {
     console.error('Data:', error.response?.data);
     console.error('Message:', error.message);
 
-    res.status(500).send(`
-            Error al obtener el token de acceso.
-            Verifica que las credenciales y redirect_uri estén correctamente configuradas.
-            ${process.env.NODE_ENV === 'development' ? `Detalles: ${error.message}` : ''}
-        `);
+    res.status(500).json({
+      error: 'Error al obtener token',
+      message:
+        'Error al obtener el token de acceso. Verifica que las credenciales y redirect_uri estén correctamente configuradas.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    });
   }
 });
 
