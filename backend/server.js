@@ -6,6 +6,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import crypto from 'crypto';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './swagger.js';
 
 // Configuración inicial
 const app = express();
@@ -42,28 +44,55 @@ app.use((req, res, next) => {
 
 // --- Funciones Helper de PKCE ---
 
-/** Genera un 'code_verifier' aleatorio */
+/**
+ * Genera un 'code_verifier' aleatorio para PKCE
+ * @returns {string} Code verifier en formato hexadecimal (128 caracteres)
+ */
 function generateCodeVerifier() {
     return crypto.randomBytes(64).toString('hex');
 }
 
-/** Genera un 'code_challenge' a partir del verifier */
+/**
+ * Genera un 'code_challenge' a partir del verifier usando SHA256
+ * @param {string} verifier - Code verifier original
+ * @returns {string} Code challenge en formato base64url
+ */
 function generateCodeChallenge(verifier) {
     return crypto.createHash('sha256')
         .update(verifier)
         .digest('base64url');
 }
 
-/** Genera un estado aleatorio para la seguridad OAuth */
+/**
+ * Genera un estado aleatorio para la seguridad OAuth (prevención de CSRF)
+ * @returns {string} Estado aleatorio en formato hexadecimal (32 caracteres)
+ */
 function generateState() {
     return crypto.randomBytes(16).toString('hex');
 }
 
 // --- Rutas ---
 
+// Swagger UI Documentation
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'FerIOX Kick App API Docs',
+}));
+
 /**
- * RUTA 1: Verificar salud/health del Servidor
- * Verifica que el servidor esté funcionando correctamente.
+ * @swagger
+ * /api/health:
+ *   get:
+ *     summary: Verificar salud del servidor
+ *     description: Endpoint para verificar que el servidor está funcionando correctamente
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Servidor funcionando correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HealthResponse'
  */
 app.get('/api/health', (req, res) => {
     res.status(200).json({
@@ -76,8 +105,19 @@ app.get('/api/health', (req, res) => {
 });
 
 /**
- * RUTA 2: Información del Servicio
- * Proporciona información básica sobre el servicio.
+ * @swagger
+ * /api:
+ *   get:
+ *     summary: Información del servicio
+ *     description: Proporciona información básica sobre el servicio y endpoints disponibles
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Información del servicio
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ServiceInfo'
  */
 app.get('/api', (req, res) => {
     res.json({
@@ -93,13 +133,27 @@ app.get('/api', (req, res) => {
             logout: '/api/auth/logout',
             config: '/api/auth/config',
             debug: '/api/auth/debug',
+            docs: '/api/docs',
         },
     });
 });
 
 /**
- * RUTA 3: Iniciar el login
- * Genera PKCE, lo guarda en una cookie y redirige al usuario a KICK.
+ * @swagger
+ * /api/auth/login:
+ *   get:
+ *     summary: Iniciar el flujo de autenticación OAuth 2.1
+ *     description: Genera PKCE, state, y redirige al usuario a KICK para autorización
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirección a KICK OAuth
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 app.get('/api/auth/login', (req, res) => {
     try {
@@ -159,9 +213,32 @@ app.get('/api/auth/login', (req, res) => {
 });
 
 /**
- * RUTA 4: Callback de Autorización
- * KICK redirige al usuario aquí después del login.
- * El servidor intercambia el 'code' por un 'access_token'.
+ * @swagger
+ * /api/auth/callback:
+ *   get:
+ *     summary: Callback de autorización OAuth
+ *     description: Endpoint donde KICK redirige después de la autorización. Intercambia el código por un access_token
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Código de autorización de KICK
+ *       - in: query
+ *         name: state
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Estado para validación CSRF
+ *     responses:
+ *       302:
+ *         description: Redirección al dashboard con autenticación exitosa
+ *       400:
+ *         description: Error de autorización o parámetros inválidos
+ *       500:
+ *         description: Error al obtener el token
  */
 app.get('/api/auth/callback', async (req, res) => {
     const { code, state, error: authError, error_description } = req.query;
@@ -244,9 +321,33 @@ app.get('/api/auth/callback', async (req, res) => {
 });
 
 /**
- * RUTA 5: Obtener datos del usuario
- * El frontend llamará a esta ruta para obtener datos del usuario.
- * El servidor usará el token (almacenado en la cookie) para llamar a la API de KICK.
+ * @swagger
+ * /api/auth/user:
+ *   get:
+ *     summary: Obtener datos del usuario autenticado
+ *     description: Ruta protegida que retorna los datos del usuario desde KICK API
+ *     tags: [User]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Datos del usuario obtenidos exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponse'
+ *       401:
+ *         description: No autorizado - Token no encontrado o inválido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Error al obtener datos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 app.get('/api/auth/user', async (req, res) => {
     const { kick_access_token: accessToken } = req.cookies;
@@ -301,8 +402,21 @@ app.get('/api/auth/user', async (req, res) => {
 });
 
 /**
- * RUTA 6: Logout
- * Elimina la cookie del token de acceso para cerrar sesión.
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Cerrar sesión del usuario
+ *     description: Elimina las cookies de autenticación para cerrar sesión
+ *     tags: [Authentication]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Sesión cerrada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LogoutResponse'
  */
 app.post('/api/auth/logout', (req, res) => {
     res.clearCookie('kick_access_token');
@@ -317,8 +431,19 @@ app.post('/api/auth/logout', (req, res) => {
 });
 
 /**
- * RUTA 7: Verificar configuración OAuth
- * Verifica que las credenciales OAuth estén configuradas correctamente.
+ * @swagger
+ * /api/auth/config:
+ *   get:
+ *     summary: Verificar configuración OAuth
+ *     description: Endpoint de desarrollo para verificar credenciales OAuth configuradas
+ *     tags: [Debug]
+ *     responses:
+ *       200:
+ *         description: Configuración OAuth
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ConfigResponse'
  */
 app.get('/api/auth/config', (req, res) => {
     res.json({
@@ -330,8 +455,17 @@ app.get('/api/auth/config', (req, res) => {
 });
 
 /**
- * RUTA 8: Debug - Información detallada del token y sesión
- * Nueva ruta para debugging de autenticación
+ * @swagger
+ * /api/auth/debug:
+ *   get:
+ *     summary: Información de debug del token
+ *     description: Endpoint de desarrollo que muestra información detallada sobre el token y la sesión
+ *     tags: [Debug]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Información de debug
  */
 app.get('/api/auth/debug', (req, res) => {
     const {
@@ -530,6 +664,7 @@ app.listen(PORT, () => {
             👤 User Data: ${process.env.BACKEND_URL}/api/auth/user
             🚪 Logout: ${process.env.BACKEND_URL}/api/auth/logout
             📊 Dashboard: ${process.env.BACKEND_URL}/dashboard
+            📚 API Docs: ${process.env.BACKEND_URL}/api/docs
         
         🔍 Para debug:
             - Verifica la configuración: ${process.env.BACKEND_URL}/api/auth/config
