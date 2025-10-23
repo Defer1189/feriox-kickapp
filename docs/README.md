@@ -60,6 +60,42 @@ Best practices, estándares de código y flujo de trabajo para desarrolladores.
 
 ---
 
+### [API Reference](./API_REFERENCE.md)
+
+Referencia rápida de todos los endpoints de la API.
+
+**Contenido:**
+
+- Base URL y configuración
+- Health & info endpoints
+- Authentication endpoints
+- Debug endpoints
+- Error responses
+- KICK OAuth scopes
+- Ejemplos de uso
+- Testing guide
+
+**Ideal para:** Desarrollo e integración con la API.
+
+---
+
+### [Security Checklist](./SECURITY.md)
+
+Checklist de seguridad y mejores prácticas implementadas.
+
+**Contenido:**
+
+- Características de seguridad implementadas
+- Recomendaciones para producción
+- Checklist de testing de seguridad
+- Plan de respuesta a incidentes
+- Recursos de seguridad
+- Checklist pre-deployment
+
+**Ideal para:** Revisión de seguridad y deployment a producción.
+
+---
+
 ## 🚀 Inicio Rápido
 
 Si es tu primera vez con este proyecto:
@@ -67,6 +103,8 @@ Si es tu primera vez con este proyecto:
 1. **Lee primero:** [Guía de Instalación](./INSTALLATION.md)
 2. **Luego:** [Documentación Técnica](./TECHNICAL_DOCUMENTATION.md)
 3. **Para contribuir:** [Guía de Desarrollo](./DEVELOPMENT.md)
+4. **Para usar la API:** [API Reference](./API_REFERENCE.md)
+5. **Antes de producción:** [Security Checklist](./SECURITY.md)
 
 ---
 
