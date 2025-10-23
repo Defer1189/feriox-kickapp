@@ -1,4 +1,11 @@
-// D:\Dinero\Kick\FerIOX_KickApp\backend\server.js
+/**
+ * @file server.js
+ * @description Servidor Express.js para la integración con KICK API utilizando OAuth 2.1 con PKCE
+ * @author FerIOX
+ * @version 1.0.0
+ * @license MIT
+ */
+
 import 'dotenv/config';
 import express from 'express';
 import axios from 'axios';
@@ -6,11 +13,23 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import crypto from 'crypto';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
+import { readFileSync } from 'fs';
+import { parse } from 'yaml';
 
 // Configuración inicial
 const app = express();
 const PORT = process.env.PORT || 3000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+// Cargar documentación Swagger
+let swaggerDocument;
+try {
+  const swaggerFile = readFileSync('./swagger.yaml', 'utf8');
+  swaggerDocument = parse(swaggerFile);
+} catch (error) {
+  console.warn('⚠️  No se pudo cargar swagger.yaml:', error.message);
+}
 
 // --- Middlewares ---
 // Middleware de seguridad
@@ -46,17 +65,30 @@ app.use((req, res, next) => {
 
 // --- Funciones Helper de PKCE ---
 
-/** Genera un 'code_verifier' aleatorio */
+/**
+ * Genera un 'code_verifier' aleatorio para PKCE
+ * @returns {string} Un string hexadecimal aleatorio de 128 caracteres
+ * @description Genera un code verifier criptográficamente seguro usado en el flujo PKCE
+ */
 function generateCodeVerifier() {
   return crypto.randomBytes(64).toString('hex');
 }
 
-/** Genera un 'code_challenge' a partir del verifier */
+/**
+ * Genera un 'code_challenge' a partir del verifier
+ * @param {string} verifier - El code verifier generado previamente
+ * @returns {string} El code challenge en formato base64url
+ * @description Crea un hash SHA256 del verifier y lo codifica en base64url para PKCE
+ */
 function generateCodeChallenge(verifier) {
   return crypto.createHash('sha256').update(verifier).digest('base64url');
 }
 
-/** Genera un estado aleatorio para la seguridad OAuth */
+/**
+ * Genera un estado aleatorio para la seguridad OAuth
+ * @returns {string} Un string hexadecimal aleatorio de 32 caracteres
+ * @description Genera un state token usado para prevenir ataques CSRF en el flujo OAuth
+ */
 function generateState() {
   return crypto.randomBytes(16).toString('hex');
 }
@@ -95,9 +127,18 @@ app.get('/api', (req, res) => {
       logout: '/api/auth/logout',
       config: '/api/auth/config',
       debug: '/api/auth/debug',
+      docs: '/api-docs',
     },
   });
 });
+
+/**
+ * RUTA: Documentación Swagger
+ * Proporciona la documentación interactiva de la API
+ */
+if (swaggerDocument) {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
 
 /**
  * RUTA 3: Iniciar el login
