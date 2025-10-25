@@ -5,6 +5,7 @@
 ### 1. Pre-requisitos
 
 Antes de empezar, asegúrate de tener:
+
 - ✅ Node.js >= 18.0.0 instalado
 - ✅ Cuenta de KICK con 2FA activado
 - ✅ Aplicación creada en KICK Dev Portal
@@ -40,6 +41,7 @@ SESSION_SECRET=tu_secreto_aleatorio_muy_largo
 ```
 
 **Generar SESSION_SECRET:**
+
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
@@ -76,11 +78,13 @@ Abre tu navegador en:
 ## 📋 Verificación Rápida
 
 ### Backend funciona ✅
+
 ```bash
 curl http://localhost:3000/api/health
 ```
 
 Deberías ver:
+
 ```json
 {
     "status": "success",
@@ -89,17 +93,21 @@ Deberías ver:
 ```
 
 ### Frontend funciona ✅
+
 Abre http://localhost:5173 y deberías ver la página de inicio.
 
 ## 🔧 Troubleshooting Rápido
 
 ### Error: "Missing environment variables"
+
 ➡️ Verifica que hayas configurado todas las variables en `backend/.env`
 
 ### Error: "redirect_uri mismatch"
+
 ➡️ Asegúrate de que `KICK_REDIRECT_URI` coincida exactamente con la configurada en KICK Dev
 
 ### Error: Puerto en uso
+
 ```bash
 # Matar procesos en puertos 3000 y 5173
 lsof -ti:3000 | xargs kill -9
