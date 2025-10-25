@@ -34,6 +34,7 @@ npm run install:all
 ```
 
 Este comando instalará las dependencias de:
+
 - Raíz del proyecto (herramientas de desarrollo)
 - Backend (servidor Express.js)
 - Frontend (aplicación React + Vite)
@@ -84,21 +85,21 @@ LOG_LEVEL=debug
 1. En tu cuenta de KICK, ve a **Settings** → **Developer**
 2. Haz clic en **Create New App** o similar
 3. Completa el formulario:
-   - **Name**: FerIOX KICK App (o el nombre que prefieras)
-   - **Description**: Aplicación de integración con KICK API usando OAuth 2.1
-   - **OAuth Redirect URIs**: `http://localhost:3000/api/auth/callback`
-   - **Scopes**: Selecciona todos los scopes que necesites:
-     - `user:read`
-     - `channel:read`
-     - `channel:write`
-     - `chat:write`
-     - `streamkey:read`
-     - `events:subscribe`
-     - `moderation:ban`
+    - **Name**: FerIOX KICK App (o el nombre que prefieras)
+    - **Description**: Aplicación de integración con KICK API usando OAuth 2.1
+    - **OAuth Redirect URIs**: `http://localhost:3000/api/auth/callback`
+    - **Scopes**: Selecciona todos los scopes que necesites:
+        - `user:read`
+        - `channel:read`
+        - `channel:write`
+        - `chat:write`
+        - `streamkey:read`
+        - `events:subscribe`
+        - `moderation:ban`
 
 4. Guarda la aplicación y copia:
-   - **Client ID**
-   - **Client Secret**
+    - **Client ID**
+    - **Client Secret**
 
 #### Paso 3: Actualizar el archivo .env
 
@@ -125,6 +126,7 @@ npm run dev
 ```
 
 Este comando inicia:
+
 - Backend en `http://localhost:3000`
 - Frontend en `http://localhost:5173`
 
@@ -177,6 +179,7 @@ Deberías ver la página de inicio de la aplicación.
 **Problema**: El backend no puede iniciar porque faltan variables de entorno.
 
 **Solución**:
+
 - Verifica que el archivo `backend/.env` existe
 - Asegúrate de que todas las variables requeridas están configuradas
 - Verifica que no hay espacios adicionales en las variables
@@ -186,6 +189,7 @@ Deberías ver la página de inicio de la aplicación.
 **Problema**: La URI de redirección no coincide con la configurada en KICK.
 
 **Solución**:
+
 - Verifica que `KICK_REDIRECT_URI` en el `.env` sea exactamente `http://localhost:3000/api/auth/callback`
 - Asegúrate de que esta misma URI está configurada en tu aplicación de KICK Dev
 - No uses `localhost` mezclado con `127.0.0.1`
@@ -195,6 +199,7 @@ Deberías ver la página de inicio de la aplicación.
 **Problema**: Las dependencias no están instaladas correctamente.
 
 **Solución**:
+
 ```bash
 # Eliminar node_modules y reinstalar
 rm -rf node_modules backend/node_modules frontend/node_modules
@@ -206,17 +211,19 @@ npm run install:all
 **Problema**: Los puertos 3000 o 5173 ya están siendo utilizados.
 
 **Solución**:
+
 - Cambia el puerto en las variables de entorno
 - O mata el proceso que está usando el puerto:
-  ```bash
-  # Linux/Mac
-  lsof -ti:3000 | xargs kill -9
-  lsof -ti:5173 | xargs kill -9
-  
-  # Windows
-  netstat -ano | findstr :3000
-  taskkill /PID <PID> /F
-  ```
+
+    ```bash
+    # Linux/Mac
+    lsof -ti:3000 | xargs kill -9
+    lsof -ti:5173 | xargs kill -9
+
+    # Windows
+    netstat -ano | findstr :3000
+    taskkill /PID <PID> /F
+    ```
 
 ## 🔄 Actualizar la Aplicación
 
