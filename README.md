@@ -1,4 +1,4 @@
-# [FerIOX](https://kick.com/feriox) Kick App 🚀 
+# [FerIOX](https://kick.com/feriox) Kick App 🚀
 
 Aplicación Full-Stack para integración segura con KICK API mediante OAuth 2.1
 
@@ -132,6 +132,7 @@ feriox-kickapp/
     cd feriox-kickapp
     npm run dev
     ```
+
 5. **Abrir en el navegador**
     - Frontend: http://localhost:5173
     - Backend API: http://localhost:3000
@@ -154,6 +155,7 @@ Una vez que el servidor esté corriendo, accede a la documentación Swagger en:
 ```
 http://localhost:3000/api/docs
 ```
+
 ---
 
 ## 🔐 Configuración de KICK Dev
@@ -273,6 +275,7 @@ npm run lint:fix             # Ejecuta ESLint y corrige automáticamente
 npm run format               # Formatea código con Prettier
 npm run format:check         # Verifica formato sin modificar
 ```
+
 ---
 
 ## 🤝 Contribuir
