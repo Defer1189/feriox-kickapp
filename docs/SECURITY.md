@@ -17,12 +17,11 @@ Esta aplicación implementa las mejores prácticas de seguridad para OAuth 2.1 y
 const verifier = crypto.randomBytes(64).toString('hex'); // 128 caracteres
 
 // Generación de code_challenge
-const challenge = crypto.createHash('sha256')
-    .update(verifier)
-    .digest('base64url');
+const challenge = crypto.createHash('sha256').update(verifier).digest('base64url');
 ```
 
 #### Beneficios:
+
 - Protección contra ataques man-in-the-middle
 - Seguridad sin necesidad de client_secret en cliente público
 - Validación criptográfica del flujo OAuth
@@ -58,14 +57,15 @@ Los tokens se almacenan en cookies httpOnly que no son accesibles desde JavaScri
 
 ```javascript
 res.cookie('kick_access_token', accessToken, {
-    httpOnly: true,      // No accesible desde JavaScript
-    secure: true,        // Solo HTTPS en producción
-    sameSite: 'lax',     // Protección CSRF adicional
-    maxAge: 3600000,     // Expiración en milisegundos
+    httpOnly: true, // No accesible desde JavaScript
+    secure: true, // Solo HTTPS en producción
+    sameSite: 'lax', // Protección CSRF adicional
+    maxAge: 3600000, // Expiración en milisegundos
 });
 ```
 
 #### Beneficios:
+
 - Protección contra XSS (Cross-Site Scripting)
 - Los tokens no pueden ser robados por JavaScript malicioso
 - Transmisión automática en requests
@@ -77,13 +77,16 @@ Helmet configura headers HTTP seguros automáticamente.
 #### Headers Configurados:
 
 ```javascript
-app.use(helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-    contentSecurityPolicy: false, // Personalizable según necesidades
-}));
+app.use(
+    helmet({
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+        contentSecurityPolicy: false, // Personalizable según necesidades
+    }),
+);
 ```
 
 #### Headers Implementados:
+
 - `Strict-Transport-Security`: Fuerza HTTPS
 - `X-Content-Type-Options`: Previene MIME sniffing
 - `X-Frame-Options`: Protección contra clickjacking
@@ -96,15 +99,18 @@ Control estricto de orígenes permitidos.
 #### Configuración:
 
 ```javascript
-app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    }),
+);
 ```
 
 #### Beneficios:
+
 - Solo el frontend autorizado puede hacer requests
 - Previene requests no autorizados desde otros dominios
 - Permite envío de cookies (credentials: true)
@@ -119,11 +125,11 @@ Todo input del usuario es validado y sanitizado.
 // Validación de parámetros requeridos
 export function validateQueryParams(requiredParams) {
     return (req, res, next) => {
-        const missing = requiredParams.filter(p => !req.query[p]);
+        const missing = requiredParams.filter((p) => !req.query[p]);
         if (missing.length > 0) {
             return res.status(400).json({
                 error: 'Parámetros faltantes',
-                missingParams: missing
+                missingParams: missing,
             });
         }
         next();
@@ -132,7 +138,7 @@ export function validateQueryParams(requiredParams) {
 
 // Sanitización automática
 export function sanitizeInput(req, res, next) {
-    Object.keys(req.query).forEach(key => {
+    Object.keys(req.query).forEach((key) => {
         if (typeof req.query[key] === 'string') {
             req.query[key] = req.query[key].trim();
         }
@@ -150,13 +156,13 @@ No se exponen detalles sensibles en producción.
 ```javascript
 app.use((err, req, res, next) => {
     logger.error('Error:', err);
-    
+
     res.status(err.status || 500).json({
         status: 'error',
         message: 'Error interno del servidor',
         // Detalles solo en desarrollo
         error: process.env.NODE_ENV === 'development' ? err.message : undefined,
-        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     });
 });
 ```
@@ -175,26 +181,28 @@ app.use((err, req, res, next) => {
 #### ✅ Buenas prácticas:
 
 1. **Usar variables de entorno**:
-   ```env
-   # Guardar en .env (NUNCA commitear)
-   KICK_CLIENT_SECRET=tu_secret_aqui
-   SESSION_SECRET=secret_largo_y_aleatorio
-   ```
+
+    ```env
+    # Guardar en .env (NUNCA commitear)
+    KICK_CLIENT_SECRET=tu_secret_aqui
+    SESSION_SECRET=secret_largo_y_aleatorio
+    ```
 
 2. **Archivo `.env` en `.gitignore`**:
-   ```gitignore
-   # Variables de entorno
-   .env
-   .env.local
-   .env.development.local
-   .env.production.local
-   ```
+
+    ```gitignore
+    # Variables de entorno
+    .env
+    .env.local
+    .env.development.local
+    .env.production.local
+    ```
 
 3. **Usar gestores de secretos en producción**:
-   - AWS Secrets Manager
-   - Azure Key Vault
-   - HashiCorp Vault
-   - Google Secret Manager
+    - AWS Secrets Manager
+    - Azure Key Vault
+    - HashiCorp Vault
+    - Google Secret Manager
 
 ### Generación de Secretos Seguros
 
@@ -211,15 +219,18 @@ openssl rand -hex 32
 ### Clasificación por Nivel de Riesgo
 
 #### 🟢 Riesgo Bajo:
+
 - `user:read`: Leer información básica del usuario
 - `channel:read`: Leer información del canal
 
 #### 🟡 Riesgo Medio:
+
 - `channel:write`: Modificar metadata del canal
 - `chat:write`: Enviar mensajes en chat
 - `events:subscribe`: Suscribirse a webhooks
 
 #### 🔴 Riesgo Alto:
+
 - `streamkey:read`: **MUY SENSIBLE** - Leer stream key
 - `moderation:ban`: **POTENTE** - Banear usuarios
 
@@ -230,6 +241,7 @@ openssl rand -hex 32
 **Riesgo**: Si alguien obtiene el stream key, puede transmitir en el canal.
 
 **Mitigaciones**:
+
 - Solo solicitar si es absolutamente necesario
 - Nunca mostrar en UI
 - No enviar al frontend
@@ -241,6 +253,7 @@ openssl rand -hex 32
 **Riesgo**: Acciones de moderación muy potentes.
 
 **Mitigaciones**:
+
 - Auditar todas las acciones
 - Implementar confirmación doble
 - Logs detallados de quién ejecuta qué
@@ -251,6 +264,7 @@ openssl rand -hex 32
 **Riesgo**: Spam, abuso, violación de TOS.
 
 **Mitigaciones**:
+
 - Rate limiting agresivo
 - Validación de contenido
 - Filtros anti-spam
@@ -278,6 +292,7 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 ### 1. XSS (Cross-Site Scripting)
 
 **Protecciones**:
+
 - Cookies httpOnly (tokens no accesibles)
 - Sanitización de input
 - Content Security Policy headers
@@ -286,6 +301,7 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 ### 2. CSRF (Cross-Site Request Forgery)
 
 **Protecciones**:
+
 - State parameter en OAuth
 - SameSite cookies
 - CORS configurado
@@ -293,6 +309,7 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 ### 3. Injection Attacks
 
 **Protecciones**:
+
 - Validación de todos los inputs
 - Sanitización de queries
 - Uso de librerías seguras (Axios, etc.)
@@ -300,6 +317,7 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 ### 4. Man-in-the-Middle
 
 **Protecciones**:
+
 - HTTPS obligatorio
 - PKCE en OAuth
 - Certificate pinning (opcional, avanzado)
@@ -307,6 +325,7 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 ### 5. Brute Force
 
 **Protecciones Recomendadas**:
+
 - Rate limiting
 - Account lockout después de X intentos fallidos
 - CAPTCHA para operaciones sensibles
@@ -320,12 +339,12 @@ if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !==
 logger.warn('Intento de acceso no autorizado', {
     ip: req.ip,
     path: req.path,
-    user: req.user?.id
+    user: req.user?.id,
 });
 
 logger.error('State de OAuth no coincide - posible CSRF', {
     receivedState: req.query.state,
-    expectedState: req.signedCookies.kick_oauth_state
+    expectedState: req.signedCookies.kick_oauth_state,
 });
 ```
 
@@ -383,10 +402,10 @@ Si encuentras una vulnerabilidad de seguridad:
 1. **NO** abras un issue público
 2. Envía un email a: [security@feriox.com](mailto:security@feriox.com) (placeholder)
 3. Incluye:
-   - Descripción detallada
-   - Pasos para reproducir
-   - Impacto potencial
-   - Sugerencias de mitigación (si las tienes)
+    - Descripción detallada
+    - Pasos para reproducir
+    - Impacto potencial
+    - Sugerencias de mitigación (si las tienes)
 
 ## 📝 Actualizaciones de Seguridad
 
@@ -400,6 +419,7 @@ Si encuentras una vulnerabilidad de seguridad:
 ### KICK Terms of Service
 
 Asegúrate de cumplir con:
+
 - [KICK Terms of Service](https://kick.com/terms-of-service)
 - [KICK Developer Terms](https://dev.kick.com/terms-of-service)
 - Políticas de uso de API

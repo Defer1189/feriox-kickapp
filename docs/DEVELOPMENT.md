@@ -66,6 +66,7 @@ backend/
 ```
 
 **Convenciones**:
+
 - Archivos terminan en `.js`
 - Nombres descriptivos: `auth.controller.js`, `oauth.service.js`
 - Un export por módulo (o export nombrado múltiple si relacionados)
@@ -87,6 +88,7 @@ frontend/src/
 ```
 
 **Convenciones**:
+
 - Componentes en PascalCase: `Header.jsx`
 - Hooks en camelCase con prefijo `use`: `useAuth.js`
 - CSS junto al componente: `Header.jsx` + `Header.css`
@@ -108,6 +110,7 @@ Configuración en `.eslintrc.json`:
 ```
 
 **Comandos**:
+
 ```bash
 # Ejecutar linter
 npm run lint
@@ -130,6 +133,7 @@ Configuración en `.prettierrc.json`:
 ```
 
 **Comandos**:
+
 ```bash
 # Formatear todo el código
 npm run format
@@ -141,6 +145,7 @@ npm run format:check
 ### Git Hooks (Husky)
 
 Pre-commit hook automático:
+
 - Ejecuta `npm run lint:fix`
 - Ejecuta `npm run format`
 - Solo commitea si no hay errores
@@ -223,6 +228,7 @@ chore:    Tareas de mantenimiento
 ```
 
 **Ejemplos**:
+
 ```bash
 git commit -m "feat(auth): implementar refresh token rotation"
 git commit -m "fix(oauth): corregir validación de state en callback"
@@ -233,6 +239,7 @@ git commit -m "refactor(backend): modularizar rutas de autenticación"
 ### Pull Requests
 
 **Checklist antes de crear PR**:
+
 - [ ] Código linted (`npm run lint`)
 - [ ] Código formateado (`npm run format`)
 - [ ] Tests pasan (si existen)
@@ -241,17 +248,21 @@ git commit -m "refactor(backend): modularizar rutas de autenticación"
 - [ ] PR describe cambios claramente
 
 **Template de PR**:
+
 ```markdown
 ## Descripción
+
 Breve descripción de los cambios
 
 ## Tipo de cambio
+
 - [ ] Nueva funcionalidad
 - [ ] Corrección de bug
 - [ ] Refactorización
 - [ ] Documentación
 
 ## Testing
+
 Cómo se probaron los cambios
 
 ## Screenshots (si aplica)
@@ -273,6 +284,7 @@ npm run test:integration
 ```
 
 **Estructura de tests**:
+
 ```javascript
 describe('OAuth Service', () => {
     describe('prepareOAuthFlow', () => {
@@ -317,6 +329,7 @@ npm run build
 ### Variables de Entorno
 
 **Desarrollo**:
+
 ```env
 NODE_ENV=development
 BACKEND_URL=http://localhost:3000
@@ -324,6 +337,7 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 **Producción**:
+
 ```env
 NODE_ENV=production
 BACKEND_URL=https://api.tudominio.com
@@ -336,6 +350,7 @@ KICK_REDIRECT_URI=https://api.tudominio.com/api/auth/callback
 ### Backend
 
 **VS Code launch.json**:
+
 ```json
 {
     "version": "0.2.0",
@@ -353,6 +368,7 @@ KICK_REDIRECT_URI=https://api.tudominio.com/api/auth/callback
 ```
 
 **Logs de debug**:
+
 ```javascript
 import * as logger from './utils/logger.js';
 
@@ -365,11 +381,13 @@ logger.error('Error', error);
 ### Frontend
 
 **React DevTools**:
+
 - Inspeccionar componentes
 - Ver props y state
 - Analizar performance
 
 **Network Tab**:
+
 - Ver peticiones HTTP
 - Verificar headers y cookies
 - Debug de errores de API
