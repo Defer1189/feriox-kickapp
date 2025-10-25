@@ -34,7 +34,8 @@
     "devDependencies": {
         "concurrently": "^9.2.1",
         "eslint": "^8.57.0",
-        "prettier": "^3.2.5",
-        "husky": "^8.0.3"
+        "eslint-plugin-react": "^7.37.5",
+        "husky": "^8.0.3",
+        "prettier": "^3.2.5"
     }
 }

@@ -98,7 +98,10 @@ export async function callback(req, res) {
 
     try {
         // Intercambiar código por tokens
-        const { access_token, refresh_token, expires_in } = await oauthService.exchangeCodeForTokens(code, codeVerifier);
+        const { access_token, refresh_token, expires_in } = await oauthService.exchangeCodeForTokens(
+            code,
+            codeVerifier,
+        );
 
         // Guardar access token en cookie
         res.cookie('kick_access_token', access_token, {
