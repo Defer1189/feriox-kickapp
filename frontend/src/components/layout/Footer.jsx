@@ -31,7 +31,11 @@ function Footer() {
                         <h4>Enlaces</h4>
                         <ul>
                             <li>
-                                <a href="https://github.com/Defer1189/feriox-kickapp" target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href="https://github.com/Defer1189/feriox-kickapp"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     GitHub
                                 </a>
                             </li>
@@ -57,7 +61,11 @@ function Footer() {
                                 </a>
                             </li>
                             <li>
-                                <a href="https://github.com/Defer1189/feriox-kickapp/blob/main/README.md" target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href="https://github.com/Defer1189/feriox-kickapp/blob/main/README.md"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     Documentación
                                 </a>
                             </li>

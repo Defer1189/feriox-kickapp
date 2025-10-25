@@ -146,26 +146,26 @@ app.get('/dashboard', (req, res) => {
                 <div class="status ${isAuthenticated ? 'status-authenticated' : 'status-not-authenticated'}">
                     <h3>Estado de Autenticación:</h3>
                     <p>${
-    isAuthenticated
-        ? '✅ <strong>Autenticado</strong> - Tienes una sesión activa'
-        : '❌ <strong>No autenticado</strong> - Inicia sesión para continuar'
-}</p>
+                        isAuthenticated
+                            ? '✅ <strong>Autenticado</strong> - Tienes una sesión activa'
+                            : '❌ <strong>No autenticado</strong> - Inicia sesión para continuar'
+                    }</p>
                 </div>
                 
                 <div class="debug">
                     <h3>🔧 Panel de Control</h3>
                     ${
-    isAuthenticated
-        ? `
+                        isAuthenticated
+                            ? `
                         <button class="btn-success" onclick="testEndpoint('/api/auth/user')">👤 Ver mis datos</button>
                         <button class="btn-info" onclick="testEndpoint('/api/auth/debug')">🐛 Debug del Token</button>
                         <button class="btn-info" onclick="testEndpoint('/api/auth/config')">⚙️ Ver Configuración</button>
                         <button class="btn-danger" onclick="logout()">🚪 Cerrar Sesión</button>
                     `
-        : `
+                            : `
                         <a href="/api/auth/login"><button class="btn-primary">🔐 Iniciar Sesión con KICK</button></a>
                     `
-}
+                    }
                 </div>
 
                 <div id="result" class="debug"></div>

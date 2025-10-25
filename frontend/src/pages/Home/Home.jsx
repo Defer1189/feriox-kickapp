@@ -35,7 +35,12 @@ function Home() {
                             Iniciar Sesión con KICK
                         </Link>
                     )}
-                    <a href="https://github.com/Defer1189/feriox-kickapp" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                    <a
+                        href="https://github.com/Defer1189/feriox-kickapp"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-secondary"
+                    >
                         Ver en GitHub
                     </a>
                 </div>
